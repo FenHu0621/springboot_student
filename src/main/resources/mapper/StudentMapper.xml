@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lening.mapper.StudentMapper">
+    <select id="selectAll" resultType="com.lening.entity.Student">
+        select s.*,m.name mname,ma.name cname,group_concat(g.name) gname from student s
+        left join stu_major_relation smr on s.id = smr.sid
+        left join major m on m.id = smr.mid
+        left join major ma on ma.id = smr.cid
+        left join stu_game_relation sgr on sgr.sid = s.id
+        left join game g on g.id = sgr.gid
+        <where>
+            <if test="name != null and name != ''">
+                s.name like concat('%',#{name},'%')
+            </if>
+        </where>
+        group by s.id
+    </select>
+
+    <select id="findGame" resultType="com.lening.entity.Student">
+        select * from game
+    </select>
+
+    <select id="findMajor" resultType="com.lening.entity.Student">
+        select * from major where mid = #{mid}
+    </select>
+
+    <insert id="insertStudent" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO student(`name`, `url`, `age`, `sex`, `hobby`) VALUES (#{name},#{url},#{age},#{sex},#{hobby})
+    </insert>
+
+    <insert id="insertMajor">
+        INSERT INTO stu_major_relation(sid, mid, cid) VALUES (#{sid},#{mid},#{cid})
+    </insert>
+
+    <insert id="insertGame">
+        INSERT INTO stu_game_relation(sid, gid) VALUES
+            <foreach collection="list" item="gid" separator=",">
+                (#{id},#{gid})
+            </foreach>
+    </insert>
+
+    <delete id="deleteStu">
+        delete from student where id = #{id}
+    </delete>
+
+    <delete id="deleteGame">
+        delete from stu_game_relation where sid = #{id}
+    </delete>
+
+    <delete id="deleteMajor">
+        delete from stu_major_relation where sid = #{id}
+    </delete>
+
+    <select id="findUrl" resultType="String">
+        select url from student where id = #{id}
+    </select>
+
+
+    <select id="findStudentById" resultType="com.lening.entity.Student">
+        select * from student where id = #{id}
+    </select>
+    <select id="findMajorById" resultType="com.lening.entity.Student">
+        select * from stu_major_relation where sid = #{id}
+    </select>
+    <select id="findGameById" resultType="com.lening.entity.Student">
+        select * from stu_game_relation where sid = #{id}
+    </select>
+
+    <update id="updateStudentById">
+        UPDATE student SET `name` = #{name}, `url` = #{url}, `age` = #{age}, `sex` = #{sex}, `hobby` = #{hobby} WHERE `id` = #{id}
+    </update>
+
+    <update id="updateMajorById">
+        UPDATE stu_major_relation SET `mid` = #{mid}, `cid` = #{cid} WHERE `sid` = #{id};
+    </update>
+
+
+
+
+
+
+</mapper>

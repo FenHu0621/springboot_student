@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../vuejs/vuejs-2.5.16.js"></script>
+    <script type="text/javascript" src="../vuejs/axios-0.18.0.js"></script>
+</head>
+<body>
+    <center>
+        <h2>学生信息展示页面——Vue</h2>
+        <div id="app">
+            <input type="text" placeholder="根据学生姓名模糊查询" v-model="student.name">
+            <button @click="selectAll()">检索</button>
+            <table border="1" rules="all">
+                <tr>
+                    <th>序号</th>
+                    <th>姓名</th>
+                    <th>头像</th>
+                    <th>年龄</th>
+                    <th>性别</th>
+                    <th>爱好</th>
+                    <th>专业</th>
+                    <th>课程</th>
+                    <th>喜欢的游戏</th>
+                    <th>
+                        操作
+                        <button @click="toadd()">新增</button>
+                    </th>
+                </tr>
+                <tr v-for="s in list" align="center">
+                    <td>{{s.id}}</td>
+                    <td>{{s.name}}</td>
+                    <td>
+                        <img :src="s.url" style="width: 50px">
+                    </td>
+                    <td>{{s.age}}</td>
+                    <td>
+                        <span v-if="s.sex==1">男</span>
+                        <span v-if="s.sex==0">女</span>
+                    </td>
+                    <td>{{s.hobby}}</td>
+                    <td>{{s.mname}}</td>
+                    <td>{{s.cname}}</td>
+                    <td>{{s.gname}}</td>
+                    <td>
+                        <button @click="find(s.id)">修改</button>
+                        <button @click="del(s.id)">删除</button>
+                    </td>
+                </tr>
+                <tr align="center">
+                    <td colspan="100">
+                        当前{{pageNum}}/{{page.lastPage}}页，共计{{page.total}}条记录;
+                        <button @click="paging(1)">首页</button>
+                        <button @click="paging(page.prePage)">上一页</button>
+                        <button @click="paging(page.nextPage)">下一页</button>
+                        <button @click="paging(page.lastPage)">尾页</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </center>
+</body>
+<script type="text/javascript" src="../myjs/index.js"></script>
+</html>
